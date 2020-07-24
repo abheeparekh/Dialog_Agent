@@ -41,41 +41,37 @@ class IJCAI(simulator.Simulator):
 		belief = belief / sum(belief)
 		return belief
 
-	def robot_nlg(self,action):
+	def robot_nlg(self,action, fluent, attributes):
 		'''
 		converts the action of the robot into natural language
 		'''
 		print ''
 		if action=='terminate':
 			print'Conversation terminated'
+		elif 'confirm' in action:
+			print 'Robot is confirming that human understands the attribute: ' + str(self.attribute_dict[fluent])
+		elif 'express' in action:
+			print 'Robot is expressing the attribute: ' + str(self.attribute_dict[fluent])
+		elif 'behavior' in action:
+			print str(self.behavior_dict[fluent])
 		else:
-			fluent = action.split('_')[1]
-			if 'confirm' in action:
-				print 'Robot is confirming that human understands the attribute: ' + str(self.attribute_dict[fluent])
-			elif 'express' in action:
-				print 'Robot is expressing the attribute: ' + str(self.attribute_dict[fluent])
-			elif 'behavior' in action:
-				print str(self.behavior_dict[fluent])
-			else:
-				pass
+			pass
 
-	def human_nlg(self,obs, action):
+	def human_nlg(self,obs, action, fluent, attributes):
 		'''
 		Based on the observation made by the human model, this function generates
 		the natural language for the observation made
 		'''
 		if action=='terminate':
 			return
-		fluent = action.split('_')[1]
-		attributes = ['s' + i for i in fluent.split('s')[1:]]
-		if 'behavior' in action:
+		elif 'behavior' in action:
 			if obs=='pos':
 				for attribute in attributes:
 					print 'Human is inferring that ' + str(self.attribute_dict[attribute]) 
 			elif obs=='neg':
 				print 'Human: Not able to infer anything from the action'
 			elif obs == 'why':
-				print 'Why ' + str(self.behavior_dict[fluent])
+				print 'Human: Why ' + str(self.behavior_dict[fluent]) + '?'
 		else:
 			if obs=='pos':
 				print'Human: I understand that ' + str(self.attribute_dict[fluent])
@@ -105,18 +101,26 @@ class IJCAI(simulator.Simulator):
 		obs_idx=self.get_obs_index(obs)
 		return obs_idx
 	
-	def explain_neg(self, action):
+	def explain_neg(self, action, fluent, attributes):
 		'''
 		This function is called when human gives a negative observation. This will explain all parameters
 		of the given action
 		'''
-		fluent = action.split('_')[1]
-		attributes = ['s' + i for i in fluent.split('s')[1:]]
 		if 'behavior' in action:
 			print '\nRobot: I will explain....'
 			for attribute in attributes:
 				print 'Explanation >> ' + str(self.attribute_dict[attribute]) 
 			print('Human: I see')
+
+	def explain_why(self, action, fluent, attributes):
+		'''
+		This function is called when human asks why was a given action taken
+		This will only be called for behavior action
+		'''
+		print '\nRobot: The action will make you infer the following attributes that are not known to you'
+		for i in attributes:
+			if i not in self.known_attributes:
+				print self.attribute_dict[i]
 
 	def run(self, verbose = False):
 		'''
@@ -134,15 +138,21 @@ class IJCAI(simulator.Simulator):
 		while True :
 			action_idx=self.policy.select_action(curr_belief)
 			action = self.model.actions[action_idx]
-			self.robot_nlg(action)      
+			
+			if 'terminate' not in action:
+				# parse the action to get set of fluents
+				#split the fluents to get all the attributes
+				fluent = action.split('_')[1]
+				attributes = ['s' + i for i in fluent.split('s')[1:]]
+			
+			self.robot_nlg(action, fluent, attributes)      
 			obs_idx = self.observe(action)
 			obs = self.model.observations[obs_idx]
-			self.human_nlg(obs, action)
+			self.human_nlg(obs, action, fluent, attributes)
 
 			if 'terminate' in action:
 				print 'Dialog length', dialog_cnt
 				print ('Conversation ends......\n')
-				# temp_domain, temp_problem = write_domain_file_from_state(self.human_state, self.domain_template, self.problem_template)
 				break
 
 			dialog_cnt+=1
@@ -154,24 +164,33 @@ class IJCAI(simulator.Simulator):
 				print('current belief: ' + str(curr_belief))
 				print('observation index: ' + str(obs_idx))
 				print('observation ' + str(obs))
+			
+			# Response of robot based on human observation
 			if obs =='pos':
-				pass
-				# self.update_human_model(action)
-				# if'confirm' in action:
-				# self.confirmed_sofar.append(action)
+				# if observation is positive, update the list containing attributes which are known to human in the robot model 
+				for attribute in attributes:
+					self.known_attributes.append(attributes)
 			elif obs =='neg':
-				self.explain_neg(action)
+				# if observation is negative, provide explanation and update the belief of the robot to positive response from the human and increment dialog count
+				self.explain_neg(action, fluent, attributes)
 				obs_idx = self.get_obs_index('pos')
-				fluent = action.split('_')[1]
-				# update_action = 'confirm_' + fluent
-				update_action = action
-				action_idx = self.get_action_index(update_action)
+				action_idx = self.get_action_index(action)
 				curr_belief = self.updateBelief(action_idx,obs_idx, curr_belief)
 				dialog_cnt+=1
+			elif obs == 'why':
+				# if observation is why, provide explanation why the action was performed and update the belief of the robot to positive response from the human and increment dialog count
+				self.explain_why(action, fluent, attributes)
+				obs_idx = self.get_obs_index('pos')
+				action_idx = self.get_action_index(action)
+				curr_belief = self.updateBelief(action_idx,obs_idx, curr_belief)
+				dialog_cnt+=1
+
 		return dialog_cnt,curr_belief[-2]
 	
 	def run_n_trials(self,numbers=1):
-		
+		'''
+		this function runs n trials of the pomdp model and returns average belief of the final state and avergae dialog lenght
+		'''
 		average_belief = 0
 		average_dialog_cnt = 0
 		
