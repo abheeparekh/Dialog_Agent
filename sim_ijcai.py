@@ -16,28 +16,17 @@ from PDDLhelp import write_domain_file_from_state
 np.set_printoptions(suppress=True)
 
 class IJCAI(simulator.Simulator):
-	def __init__(self, filename='pomdp.pomdp', output='policy.policy'):
-		self.model = Model(filename, parsing_print_flag=False)
-		self.policy = Policy(len(self.model.states),len(self.model.actions) ,output)
-		# self.robot_state = read_state_from_domain_file('domainRobot.pddl', 'problemRobot.pddl')
-		# self.human_state = read_state_from_domain_file('domainHuman.pddl', 'problemHuman.pddl')
-		# self.domain_template = 'domain_template.pddl' 
-		# self.problem_template = 'prob_template.pddl'
+	def __init__(self, pomdp_file='out.pomdp', policy_file = 'out.policy'):
+		self.model = Model(pomdp_file, parsing_print_flag=False)
+		self.policy = Policy(len(self.model.states),len(self.model.actions) ,policy_file)
 		self.attribute_dict = {'s0' : 'Robot has left leg', 's1' : 'Robot has right leg', 's2' : 'Robot can listen'}
 		self.behavior_dict = {'s0s1s2': 'Robot is dancing', 's0s1':'Robot is walking'}
 		self.known_attributes=[]
-		
-	# def powerset(self,iterable):
-	#     """
-	#     powerset([1,2,3]) --> () (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)
-	#     note we return an iterator rather than a list
-	# 	"""
-	#     xs = list(iterable)
-	#     return chain.from_iterable(combinations(xs,n) for n in range(len(xs)+1))
 
 	def init_belief(self, int_prob = 1.0):
 		"""
-		initialize the beliefs of the states with index=0 evenly
+		initialize the beliefs for all the states
+		the belief for the start state will be 1.0 others states will be 0.0
 		"""
 		num_states = len(self.model.states)
 		b = np.zeros(num_states)
@@ -53,12 +42,18 @@ class IJCAI(simulator.Simulator):
 		return b
 	
 	def updateBelief(self, action_idx,obs_idx,belief ):
+		'''
+		to get next belief after performing an action and receiving an observation
+		'''
 		belief = np.dot(belief, self.model.trans_mat[action_idx, :]) 
 		belief = [belief[i] * self.model.obs_mat[action_idx, i, obs_idx] for i in range(len(self.model.states))]
 		belief = belief / sum(belief)
 		return belief
 
 	def robot_nlg(self,action):
+		'''
+		converts the action of the robot into natural language
+		'''
 		print ''
 		if action=='terminate':
 			print'Conversation terminated'
@@ -132,76 +127,10 @@ class IJCAI(simulator.Simulator):
 				print 'Explanation >> ' + str(self.attribute_dict[attribute]) 
 			print('Human: I see')
 
-			# human_params = []
-			
-			# for param in self.human_state:
-			# 	if action in param:
-			# 		human_params.append(param)
-
-			# for param in self.robot_state:
-			# 	if action in param:
-			# 		print('Explanation >> ' + param)
-			# 		if param not in human_params:
-			# 			self.human_state.append(param)
-
-	# def check_action(self, action):
-	# 	'''
-	# 	to check whether the given action in human model is same as that in robot model
-	# 	'''
-	# 	human_params = []
-		
-	# 	for param in self.human_state:
-	# 		if str(action) in param:
-	# 			human_params.append(param)
-
-	# 	for param in self.robot_state:
-	# 		if str(action) in param:
-	# 			if param not in human_params:
-	# 				return False
-	# 	return True			
-
-	# def update_human_model(self, action):
-	# 	'''
-	# 	update the human model with the robot model for a given action 
-	# 	'''
-	# 	human_params = []
-	# 	fluent = action.split('_')[1]
-	# 	for param in self.human_state:
-	# 		if str('express_'+ fluent) in param:
-	# 			human_params.append(param)
-
-	# 	for param in self.robot_state:
-	# 		if str('express_'+ fluent) in param:
-	# 			if param not in human_params:
-	# 				self.human_state.append(param)
-			
-	# def execute_plan_no_exp(self,plan_cnt):
-	# 	plan_cnt+=1
-
-	# def replan(self, a):
-	# 	explaind_sofar_ind = self.exp_ind_list[:len(self.confirmed_sofar)]
-	# 	explaind_sofar_pred=[]
-	# 	print('Explantion index list:' + str(self.exp_ind_list))
-	# 	print('Confirmed so far:' + str(self.confirmed_sofar) )
-	# 	print('Explained ID so far' + str(explaind_sofar_ind))
-	# 	print('Precondition dict' + str(self.expdict))
-	# 	for i in explaind_sofar_ind:
-	# 		# explaind_sofar_pred.append(self.expdict[i]) 
-	# 		explaind_sofar_pred.append(self.expdict.get('%{0}'.format(i))) 
-	# 	print('Explained so far:' + str(explaind_sofar_pred))
-	# 	subsets_of_explained = self.powerset(explaind_sofar_pred)
-	# 	print('Subset of explained ' + str(list(subsets_of_explained)))
-	# 	tempdict = {}
-	# 	plans = {}
-	# 	print('update human: ' + str(self.updatehuman()))
-
-	# 	for i,each_subset in enumerate(subsets_of_explained):
-	# 		tempdiff =list(set(Update.updatehuman()) - set(each_subset))
-	# 		plans[each_subset]= (Update.updatedomainH(tempdiff))
-	# 	print('re plan ' + str(plans))
-	# 	return plans
-
 	def run(self, verbose = False):
+		'''
+		to run the dialog agent with input pomdp and policy file
+		'''
 		curr_belief = self.init_belief()
 		dialog_cnt=0
 		state_idx,init_state = self.init_state()
@@ -262,19 +191,16 @@ class IJCAI(simulator.Simulator):
 
 		average_dialog_cnt= average_dialog_cnt/float(numbers)
 		average_belief= average_belief/float(numbers)
-		result=[]
-		result.append(average_belief)
-		result.append(average_dialog_cnt)
+		result=[average_belief, average_dialog_cnt]
 		return result
 
 def main():
-		n = 'prj1_3a'
-		b=IJCAI(filename='out.pomdp', output='out.policy')
-		# b=IJCAI(filename=n+'.pomdp', output=n+'.policy')
-		result = b.run_n_trials()
+		file_name = 'prj1_3a'
+		model=IJCAI(pomdp_file='out.pomdp', policy_file='out.policy')
+		# b=IJCAI(filename=file_name+'.pomdp', output=file_name+'.policy')
+		result = model.run_n_trials()
 
 
 if __name__=="__main__":
-
 	main()
 
