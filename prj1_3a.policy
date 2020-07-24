@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<Policy version="0.1" type="value" model="../examples/POMDP/prj1_3.pomdp" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="policyx.xsd">
+<AlphaVector vectorLength="9" numObsValue="1" numVectors="40">
+<Vector action="7" obsValue="0">23.7 33.6 33.6 73.2 33.6 73.2 73.2 93 0 </Vector>
+<Vector action="7" obsValue="0">69.3138 75.3978 75.3978 87.3847 75.3978 87.3847 87.3847 91.614 0 </Vector>
+<Vector action="7" obsValue="0">78.9401 81.5887 81.5887 88.5026 81.5887 88.5026 88.5026 91.4632 0 </Vector>
+<Vector action="7" obsValue="0">79.9528 82.1628 82.1628 88.5312 82.1628 88.5312 88.5312 91.3865 0 </Vector>
+<Vector action="7" obsValue="0">80.0596 82.2074 82.2074 88.5266 82.2074 88.5266 88.5266 91.3789 0 </Vector>
+<Vector action="7" obsValue="0">80.1605 82.2354 82.2354 88.462 82.2354 88.462 88.462 91.2937 0 </Vector>
+<Vector action="7" obsValue="0">73.1908 76.675 76.675 87.3401 76.675 87.3401 87.3401 92.2316 0 </Vector>
+<Vector action="7" obsValue="0">80.0818 82.2161 82.2161 88.5257 82.2161 88.5257 88.5257 91.3774 0 </Vector>
+<Vector action="7" obsValue="0">80.0733 82.2138 82.2138 88.5267 82.2138 88.5267 88.5267 91.3782 0 </Vector>
+<Vector action="7" obsValue="0">79.9665 82.1691 82.1691 88.5313 82.1691 88.5313 88.5313 91.3858 0 </Vector>
+<Vector action="7" obsValue="0">80.0832 82.2166 82.2166 88.5256 82.2166 88.5256 88.5256 91.3774 0 </Vector>
+<Vector action="7" obsValue="0">80.0746 82.2142 82.2142 88.5267 82.2142 88.5267 88.5267 91.3781 0 </Vector>
+<Vector action="4" obsValue="0">53.4236 56.47 -83.5033 -82.4528 56.47 65.9249 -82.4528 96.2309 0 </Vector>
+<Vector action="7" obsValue="0">80.0761 82.2149 82.2149 88.5266 82.2149 88.5266 88.5266 91.378 0 </Vector>
+<Vector action="7" obsValue="0">80.0848 82.2172 82.2172 88.5256 82.2172 88.5256 88.5256 91.3773 0 </Vector>
+<Vector action="7" obsValue="0">73.3161 76.7345 76.7345 87.3455 76.7345 87.3455 87.3455 92.2309 0 </Vector>
+<Vector action="7" obsValue="0">80.0848 82.2172 82.2172 88.5256 82.2172 88.5256 88.5256 91.3773 0 </Vector>
+<Vector action="7" obsValue="0">80.0761 82.2149 82.2149 88.5266 82.2149 88.5266 88.5266 91.378 0 </Vector>
+<Vector action="7" obsValue="0">80.0848 82.2172 82.2172 88.5256 82.2172 88.5256 88.5256 91.3773 0 </Vector>
+<Vector action="7" obsValue="0">80.0761 82.2149 82.2149 88.5266 82.2149 88.5266 88.5266 91.378 0 </Vector>
+<Vector action="3" obsValue="0">53.4245 56.4704 56.4704 65.9249 -83.5033 -82.4528 -82.4528 96.2309 0 </Vector>
+<Vector action="7" obsValue="0">80.0849 82.2173 82.2173 88.5256 82.2173 88.5256 88.5256 91.3773 0 </Vector>
+<Vector action="7" obsValue="0">80.0762 82.2149 82.2149 88.5266 82.2149 88.5266 88.5266 91.378 0 </Vector>
+<Vector action="7" obsValue="0">79.9681 82.1697 82.1697 88.5313 82.1697 88.5313 88.5313 91.3857 0 </Vector>
+<Vector action="4" obsValue="0">53.4245 56.4704 -83.5033 -82.4528 56.4704 65.9249 -82.4528 96.2309 0 </Vector>
+<Vector action="7" obsValue="0">73.3149 76.734 76.734 87.3455 76.734 87.3455 87.3455 92.2309 0 </Vector>
+<Vector action="7" obsValue="0">50.5392 60.2622 60.2622 86.0054 37.4248 74.2539 74.2539 92.6269 0 </Vector>
+<Vector action="7" obsValue="0">73.3035 76.729 76.729 87.3452 76.729 87.3452 87.3452 92.2309 0 </Vector>
+<Vector action="7" obsValue="0">73.3161 76.7345 76.7345 87.3455 76.7345 87.3455 87.3455 92.2309 0 </Vector>
+<Vector action="7" obsValue="0">73.3161 76.7345 76.7345 87.3455 76.7345 87.3455 87.3455 92.2309 0 </Vector>
+<Vector action="7" obsValue="0">64.5959 71.1309 71.1309 86.2937 71.1309 86.2937 86.2937 92.307 0 </Vector>
+<Vector action="7" obsValue="0">73.316 76.7345 76.7345 87.3455 76.7345 87.3455 87.3455 92.2309 0 </Vector>
+<Vector action="7" obsValue="0">72.185 76.1294 76.1294 87.269 76.1294 87.269 87.269 92.2384 0 </Vector>
+<Vector action="7" obsValue="0">79.0654 81.6482 81.6482 88.5079 81.6482 88.5079 88.5079 91.4625 0 </Vector>
+<Vector action="7" obsValue="0">79.9807 82.1753 82.1753 88.5316 82.1753 88.5316 88.5316 91.3856 0 </Vector>
+<Vector action="7" obsValue="0">80.0774 82.2154 82.2154 88.5267 82.2154 88.5267 88.5267 91.378 0 </Vector>
+<Vector action="8" obsValue="0">-100 -100 -100 -100 -100 -100 -100 100 0 </Vector>
+<Vector action="7" obsValue="0">73.3161 76.7345 76.7345 87.3455 76.7345 87.3455 87.3455 92.2309 0 </Vector>
+<Vector action="7" obsValue="0">73.3161 76.7345 76.7345 87.3455 76.7345 87.3455 87.3455 92.2309 0 </Vector>
+<Vector action="7" obsValue="0">80.085 82.2173 82.2173 88.5256 82.2173 88.5256 88.5256 91.3773 0 </Vector>
+</AlphaVector> </Policy>
