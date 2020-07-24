@@ -1,17 +1,8 @@
 #!/usr/bin/env python
-from parser1 import Policy,Solver
 from pomdp_parser import Model
+from parser1 import Policy
 import numpy as np
-from scipy.stats import entropy
-import parse_exp
-import random
-import matplotlib.pyplot as plt; plt.rcdefaults()
-import matplotlib.pyplot as plt
 import simulator
-from itertools import chain, combinations
-from updatehuman import Update
-from PDDLhelp import read_state_from_domain_file
-from PDDLhelp import write_domain_file_from_state
 
 np.set_printoptions(suppress=True)
 
