@@ -1,11 +1,9 @@
-# behavior_s0s1s2 has high cost
-# behavior_s0s1 has hgh cost
 discount : 0.99
 
 values: reward
 
 states: nots0_nots1_nots2 nots0_nots1_s2 nots0_s1_nots2 nots0_s1_s2 s0_nots1_nots2 s0_nots1_s2 s0_s1_nots2 s0_s1_s2 term 
-actions:express_s0 express_s1 express_s2 confirm_s0 confirm_s1 confirm_s2 behavior_s0s1 behavior_s0s1s2 terminate 
+actions:express_s0 express_s1 express_s2 confirm_s0 confirm_s1 confirm_s2 behavior_s0 behavior_s1 behavior_s2 terminate 
 observations: pos neg na why
 start: uniform
 
@@ -86,24 +84,35 @@ T: terminate
 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 
 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 
 
-T: behavior_s0s1
-0.1 0.0 0.1 0.0 0.1 0.0 0.7 0.0 0.0 
-0.0 0.1 0.0 0.1 0.0 0.1 0.0 0.7 0.0 
+T: behavior_s0
+0.1 0.0 0.0 0.0 0.9 0.0 0.0 0.0 0.0 
+0.0 0.1 0.0 0.0 0.0 0.9 0.0 0.0 0.0 
 0.0 0.0 0.1 0.0 0.0 0.0 0.9 0.0 0.0 
 0.0 0.0 0.0 0.1 0.0 0.0 0.0 0.9 0.0 
+0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 
+0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 
+0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 
+0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 
+0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0
+
+T: behavior_s1
+0.1 0.0 0.9 0.0 0.0 0.0 0.0 0.0 0.0 
+0.0 0.1 0.0 0.9 0.0 0.0 0.0 0.0 0.0 
+0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 
+0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 
 0.0 0.0 0.0 0.0 0.1 0.0 0.9 0.0 0.0 
 0.0 0.0 0.0 0.0 0.0 0.1 0.0 0.9 0.0 
 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 
 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 
 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0
 
-T: behavior_s0s1s2
-0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.65 0.0 
-0.0 0.1 0.0 0.1 0.0 0.1 0.0 0.7 0.0 
-0.0 0.0 0.1 0.1 0.0 0.0 0.1 0.7 0.0 
-0.0 0.0 0.0 0.1 0.0 0.0 0.0 0.9 0.0 
-0.0 0.0 0.0 0.0 0.1 0.1 0.1 0.7 0.0 
-0.0 0.0 0.0 0.0 0.0 0.1 0.0 0.9 0.0 
+T: behavior_s2
+1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
+0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
+0.0 0.0 0.1 0.9 0.0 0.0 0.0 0.0 0.0 
+0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 
+0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 
+0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 
 0.0 0.0 0.0 0.0 0.0 0.0 0.1 0.9 0.0 
 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 
 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0
@@ -185,47 +194,68 @@ O: terminate
 0.0 0.0 1.0 0.0
 0.0 0.0 1.0 0.0
 
-O: behavior_s0s1
+O: behavior_s0
 0.1 0.5 0.1 0.3 
 0.1 0.5 0.1 0.3 
 0.1 0.5 0.1 0.3 
-0.1 0.5 0.1 0.3 
-0.1 0.5 0.1 0.3 
-0.1 0.5 0.1 0.3 
+0.1 0.5 0.1 0.3  
+0.7 0.1 0.1 0.1
+0.7 0.1 0.1 0.1
 0.7 0.1 0.1 0.1
 0.7 0.1 0.1 0.1
 0.0 0.0 1.0 0.0
 
-O: behavior_s0s1s2
+O: behavior_s1
 0.1 0.5 0.1 0.3 
 0.1 0.5 0.1 0.3 
-0.1 0.5 0.1 0.3 
-0.1 0.5 0.1 0.3 
-0.1 0.5 0.1 0.3 
+0.7 0.1 0.1 0.1
+0.7 0.1 0.1 0.1 
 0.1 0.5 0.1 0.3 
 0.1 0.5 0.1 0.3
 0.7 0.1 0.1 0.1
+0.7 0.1 0.1 0.1
 0.0 0.0 1.0 0.0
 
-R:behavior_s0s1 : nots0_nots1_nots2 : * :* -6.0
-R:behavior_s0s1 : nots0_nots1_s2 : * :* -6.0
-R:behavior_s0s1 : nots0_s1_nots2 : * :* -6.0
-R:behavior_s0s1 : nots0_s1_s2 : * :* -6.0
-R:behavior_s0s1 : s0_nots1_nots2 : * :* -6.0
-R:behavior_s0s1 : s0_nots1_s2 : * :* -6.0
-R:behavior_s0s1 : s0_s1_nots2 : * :* -6.0
-R:behavior_s0s1 : s0_s1_s2 : * :* -6.0
-R:behavior_s0s1 : term : * :* 0.0
+O: behavior_s2
+0.1 0.5 0.1 0.3 
+0.7 0.1 0.1 0.1
+0.1 0.5 0.1 0.3
+0.7 0.1 0.1 0.1 
+0.1 0.5 0.1 0.3
+0.7 0.1 0.1 0.1 
+0.1 0.5 0.1 0.3
+0.7 0.1 0.1 0.1 
+0.0 0.0 1.0 0.0
 
-R:behavior_s0s1s2 : nots0_nots1_nots2 : * :* -60.0
-R:behavior_s0s1s2 : nots0_nots1_s2 : * :* -60.0
-R:behavior_s0s1s2 : nots0_s1_nots2 : * :* -60.0
-R:behavior_s0s1s2 : nots0_s1_s2 : * :* -60.0
-R:behavior_s0s1s2 : s0_nots1_nots2 : * :* -60.0
-R:behavior_s0s1s2 : s0_nots1_s2 : * :* -60.0
-R:behavior_s0s1s2 : s0_s1_nots2 : * :* -60.0
-R:behavior_s0s1s2 : s0_s1_s2 : * :* -60.0
-R:behavior_s0s1s2 : term : * :* 0.0
+R:behavior_s0 : nots0_nots1_nots2 : * :* -60.0
+R:behavior_s0 : nots0_nots1_s2 : * :* -60.0
+R:behavior_s0 : nots0_s1_nots2 : * :* -60.0
+R:behavior_s0 : nots0_s1_s2 : * :* -60.0
+R:behavior_s0 : s0_nots1_nots2 : * :* -60.0
+R:behavior_s0 : s0_nots1_s2 : * :* -60.0
+R:behavior_s0 : s0_s1_nots2 : * :* -60.0
+R:behavior_s0 : s0_s1_s2 : * :* -60.0
+R:behavior_s0 : term : * :* 0.0
+
+R:behavior_s1 : nots0_nots1_nots2 : * :* -2.0
+R:behavior_s1 : nots0_nots1_s2 : * :* -2.0
+R:behavior_s1 : nots0_s1_nots2 : * :* -2.0
+R:behavior_s1 : nots0_s1_s2 : * :* -2.0
+R:behavior_s1 : s0_nots1_nots2 : * :* -2.0
+R:behavior_s1 : s0_nots1_s2 : * :* -2.0
+R:behavior_s1 : s0_s1_nots2 : * :* -2.0
+R:behavior_s1 : s0_s1_s2 : * :* -2.0
+R:behavior_s1 : term : * :* 0.0
+
+R:behavior_s2 : nots0_nots1_nots2 : * :* -2.0
+R:behavior_s2 : nots0_nots1_s2 : * :* -2.0
+R:behavior_s2 : nots0_s1_nots2 : * :* -2.0
+R:behavior_s2 : nots0_s1_s2 : * :* -2.0
+R:behavior_s2 : s0_nots1_nots2 : * :* -2.0
+R:behavior_s2 : s0_nots1_s2 : * :* -2.0
+R:behavior_s2 : s0_s1_nots2 : * :* -2.0
+R:behavior_s2 : s0_s1_s2 : * :* -2.0
+R:behavior_s2 : term : * :* 0.0
 
 R:express_s0 : nots0_nots1_nots2 : * :* -4.0
 R:express_s0 : nots0_nots1_s2 : * :* -4.0

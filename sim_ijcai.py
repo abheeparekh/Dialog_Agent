@@ -10,8 +10,10 @@ class IJCAI(simulator.Simulator):
 	def __init__(self, pomdp_file='out.pomdp', policy_file = 'out.policy'):
 		self.model = Model(pomdp_file, parsing_print_flag=False)
 		self.policy = Policy(len(self.model.states),len(self.model.actions) ,policy_file)
-		self.attribute_dict = {'s0' : 'Robot has left leg', 's1' : 'Robot has right leg', 's2' : 'Robot can listen'}
-		self.behavior_dict = {'s0s1s2': 'Robot is dancing', 's0s1':'Robot is walking'}
+		# self.attribute_dict = {'s0' : 'Robot has left leg', 's1' : 'Robot has right leg', 's2' : 'Robot can listen'}
+		self.attribute_dict = {'s0' : 'Robot does not detect rubble at P1', 's1' : 'Robot detects rubble at P2', 's2' : 'Robot detects rubble at P3'}
+		# self.behavior_dict = {'s0s1s2': 'Robot is dancing', 's0s1':'Robot is walking'}
+		self.behavior_dict = {'s0': 'Move through P1', 's1':'Clear rubble at P2 and move through P2', 's2': 'Clear rubble at P3 and move through P3'}
 		self.known_attributes=[]
 
 	def init_belief(self, int_prob = 1.0):
@@ -47,7 +49,7 @@ class IJCAI(simulator.Simulator):
 		'''
 		print ''
 		if action=='terminate':
-			print'Conversation terminated'
+			print'Conversation terminated by Robot'
 		elif 'confirm' in action:
 			print 'Robot is confirming that human understands the attribute: ' + str(self.attribute_dict[fluent])
 		elif 'express' in action:
@@ -120,7 +122,7 @@ class IJCAI(simulator.Simulator):
 		print '\nRobot: The action will make you infer the following attributes that are not known to you'
 		for i in attributes:
 			if i not in self.known_attributes:
-				print self.attribute_dict[i]
+				print 'Explanation >> ' + str(self.attribute_dict[i])
 
 	def run(self, verbose = False):
 		'''
@@ -205,9 +207,9 @@ class IJCAI(simulator.Simulator):
 		return result
 
 def main():
-		file_name = 'prj1_3a'
-		model=IJCAI(pomdp_file='out.pomdp', policy_file='out.policy')
-		# b=IJCAI(filename=file_name+'.pomdp', output=file_name+'.policy')
+		file_name = 'prj1_3_usar'
+		# model=IJCAI(pomdp_file='out.pomdp', policy_file='out.policy')
+		model=IJCAI(pomdp_file=file_name+'.pomdp', policy_file=file_name+'.policy')
 		result = model.run_n_trials()
 
 
