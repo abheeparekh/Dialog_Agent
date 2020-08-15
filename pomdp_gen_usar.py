@@ -228,19 +228,19 @@ def generate_observations():
 	observations.append('na')
 	observations.append('why')
 	return observations
-	return 'observations: pos neg na why'
 
-
-def generate_transition_matrix(states, state_index, actions, n):
+def generate_transition_matrix(states, state_index, actions, prerequisite_dict):
 	matrices = []
 	for action in actions:	
-		matrix = transition_matrix_action(states, state_index, action, n)
+		matrix = transition_matrix_action(states, state_index, action, prerequisite_dict)
 		matrices.append(matrix)
 	return matrices
 
-def transition_matrix_action(states, state_index, action, n):
+def transition_matrix_action(states, state_index, action, prerequisite_dict):
+	
 	m = len(states)
 	matrix = []
+	action_accuracy = 0.9
 	if 'confirm' in action:
 		row = [0.0 for _ in range(m)] 
 		row[0] = 1.0
@@ -248,64 +248,43 @@ def transition_matrix_action(states, state_index, action, n):
 			matrix.append(row)
 			row = [0.0] + row[:-1]
 		return matrix
-	if 'express' in action:
+	elif 'express' in action or 'behavior' in action:
+		
 		action_attribute = action.split('_')[1]
 		# iterate over the column by building matrix row by row
 		for init in states:
+			init_state_attributes = init.split('_')
 			row = [0.0]*(len(states))
+			prerequisite_fail = False
+			
+			# check for prerequsites if action is behavior
+			if 'behavior' in action:
+				if 'not' + prerequisite_dict[action_attribute] in init_state_attributes:
+					prerequisite_fail = True
+			
 			# if the state is not know initially, then after the action make the state know with some probability
-			if 'not' + action_attribute in init:
-				row[state_index[init]] = 0.1
-				# split the initial state into attributed. Make the attribute corresponding to the action known and build the final state
-				attribute = init.split('_')
+			if 'not' + action_attribute in init and not prerequisite_fail:
+				row[state_index[init]] = 1-action_accuracy
 				final = []
-				for st in attribute:
+				for st in init_state_attributes:
 					if action_attribute in st:
 						final.append(action_attribute)
 					else:
 						final.append(st)
 				final_state = '_'.join(final)
-				print(init, final_state)
-				row[state_index[final_state]] = 0.9
+				row[state_index[final_state]] = action_accuracy
 			else:
 				row[state_index[init]] = 1.0
 
 			matrix.append(row)	
-		print(action_attribute)
 		return matrix
-	
-	
-	# elif 'express' in action:
-	# 	fluent = action.split('_')[1]
-	# 	num = int(fluent[1])
-	# 	row[0] = 0.1
-	# 	row[half-num-1] = 0.9
-	# matrix = []
-	# for i in range(m//2):
-	# 	matrix.append(row)
-	# 	row = [0.0] + row[:-1]
-	# row = [0.0 for _ in range(m)]
-	# row[i+1] = 1.0 
-	# for i in range(m//2+1):
-	# 	matrix.append(row)
-	# 	row = [0.0] + row[:-1]
-	# return matrix
-	
-	# half = 2**(n-1)
-	# matrix = [[0.0]*(m) for _ in range(m)]
-	# for i in range(m):
-	# 	for j in range(m):
-	# 		if 'confirm' in action:
-	# 			if i ==j:
-	# 				matrix[i][j] = 1.0
-			
-				
-				
+	else:
+		# terminate
+		row = [0.0 for _ in range(m)] 
+		row[-1] = 1.0
+		return [row]*m
+	return 
 
-
-				
-				
-	return matrix
 
 def print_matrix(matrix):
 	for i in range (len(matrix)):
@@ -313,8 +292,17 @@ def print_matrix(matrix):
 			print matrix[i][j],
 		print'\n',
 
+def get_matrix_string(matrix):
+	s = ''
+	for i in range (len(matrix)):
+		for j in range(len(matrix)):
+			s += str(matrix[i][j]) + ' '
+		s += '\n'
+	return s
+
 def main():
 	n=3
+	prerequisite_dict = {'s0': '#', 's1': '#', 's2': 's1', 's3': '#', 's4': '#'}
 	s = ''
 	s += 'discount : 0.99\n\nvalues: reward\n'
 
@@ -328,8 +316,18 @@ def main():
 	s+='\nstart: uniform\n'
 	# print(state_index)
 	# matrix = generate_transition_matrix(states, actions, n)
-	matrix = transition_matrix_action(states, state_index, 'express_s1', 3)
-	print_matrix(matrix)
+	matrices = generate_transition_matrix(states, state_index, actions, prerequisite_dict)
+
+	for i in range(len(actions)):
+		s += '\nT: {0}\n'.format(actions[i])
+		matrix_string = get_matrix_string(matrices[i])
+		s += matrix_string
+	print(s)
+
+
+	
+	# matrix = transition_matrix_action(states, state_index, 'behavior_s2', prerequisite_dict)
+	# print_matrix(matrix)
 	# for state in create_states_from_bin(n):
 	# 	s += state + ' '
 
