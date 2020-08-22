@@ -207,9 +207,9 @@ class IJCAI(simulator.Simulator):
 		return result
 
 def main():
-		file_name = 'prj1_3_usar'
-		# model=IJCAI(pomdp_file='out.pomdp', policy_file='out.policy')
-		model=IJCAI(pomdp_file=file_name+'.pomdp', policy_file=file_name+'.policy')
+		file_name = 'prj1_3a'
+		model=IJCAI(pomdp_file='out.pomdp', policy_file='out.policy')
+		# model=IJCAI(pomdp_file=file_name+'.pomdp', policy_file=file_name+'.policy')
 		result = model.run_n_trials()
 
 

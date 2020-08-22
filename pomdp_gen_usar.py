@@ -399,7 +399,7 @@ def main():
 		s += '\nO: {0}\n'.format(actions[i])
 		matrix_string = get_matrix_string(matrices[i])
 		s += matrix_string
-
+	s += '\n'
 	# Reward Matrix
 	matrices = generate_reward_matrix(states, actions)
 	for matrix in matrices:
